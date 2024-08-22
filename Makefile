@@ -16,3 +16,6 @@ down:
 	docker compose -f ./docker-compose.yml down
 restart:
 	docker compose -f ./docker-compose.yml restart
+menu:
+	echo 'Kafka UI: http://localhost:$(KAFKA_UI_PORT)/'
+	echo 'Registry UI: http://localhost:$(SCHEMA_REGISTRY_UI_PORT)/'

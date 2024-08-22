@@ -34,7 +34,7 @@ services:
     volumes:
       - ./kafka_ui_dynamic_config.yaml:/etc/kafkaui/dynamic_config.yaml
     ports:
-      - ${REGISTRY_PORT}:8080
+      - ${KAFKA_UI_PORT}:8080
     networks:
       - kafka-custom-network
     environment:
@@ -60,9 +60,7 @@ services:
 #      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: SSL://hostname2:9092
 #      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL:
     ports:
-#      - 8184:8080
-#      - 8185:8081
-      - 8081:8081
+      - ${SCHEMA_PORT}:8081
 #https://hub.docker.com/r/landoop/schema-registry-ui/
   schema-registry-ui:
     restart: always
@@ -88,7 +86,7 @@ services:
 #      CADDY_OPTIONS: timeouts none
 #      RELATIVE_PROXY_URL: 0
     ports:
-      - ${SCHEMA_REGISTRY_PORT}:8000
+      - ${SCHEMA_REGISTRY_UI_PORT}:8000
 networks:
   kafka-custom-network:
     driver: bridge

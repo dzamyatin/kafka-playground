@@ -1,0 +1,6 @@
+### Create a new schema
+POST http://localhost:8081/subjects/test-value/versions
+Content-Type: application/vnd.schemaregistry.v1+json
+
+{"schema": "{\"type\":\"record\",\"name\":\"Payment\",\"namespace\":\"io.confluent.examples.clients.basicavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"amount\",\"type\":\"double\"}]}"}
+###
