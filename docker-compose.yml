@@ -1,5 +1,6 @@
 services:
   zookeeper:
+    restart: always
     container_name: "${PROJECT_NAME}-zookeeper"
     image: confluentinc/cp-zookeeper:7.4.4
     environment:
@@ -7,13 +8,18 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - ${ZOOKEEPER_PORT}:2181
+    networks:
+      - kafka-custom-network
   kafka:
+    restart: always
     container_name: "${PROJECT_NAME}-kafka"
     image: confluentinc/cp-kafka:7.4.4
     depends_on:
       - zookeeper
     ports:
       - ${KAFKA_PORT}:9092
+    networks:
+      - kafka-custom-network
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -22,31 +28,67 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
   kafka-ui:
+    restart: always
     container_name: "${PROJECT_NAME}-kafka-ui"
     image: provectuslabs/kafka-ui:latest
     volumes:
       - ./kafka_ui_dynamic_config.yaml:/etc/kafkaui/dynamic_config.yaml
     ports:
       - ${REGISTRY_PORT}:8080
+    networks:
+      - kafka-custom-network
     environment:
       DYNAMIC_CONFIG_ENABLED: true
-  #https://docs.confluent.io/platform/current/installation/docker/config-reference.html#sr-long-configuration
+#https://docs.confluent.io/platform/current/installation/docker/config-reference.html#sr-long-configuration
   schema-registry:
+    restart: always
     depends_on:
       - kafka
     container_name: "${PROJECT_NAME}-schema-registry"
     image: confluentinc/cp-schema-registry:latest
+    networks:
+      kafka-custom-network:
+        aliases:
+          - schema-registry-net
     environment:
       SCHEMA_REGISTRY_DEBUG: true
+#      SCHEMA_REGISTRY_HOST_NAME: localhost
       SCHEMA_REGISTRY_HOST_NAME: localhost
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
 #      SCHEMA_REGISTRY_LISTENERS: http://localhost:8081
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 #      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: SSL://hostname2:9092
 #      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL:
     ports:
-      - ${SCHEMA_PORT}:8080
-#    volumes:
-#      - ./:/
-
-volumes:
-  pimcore-database:
+#      - 8184:8080
+#      - 8185:8081
+      - 8081:8081
+#https://hub.docker.com/r/landoop/schema-registry-ui/
+  schema-registry-ui:
+    restart: always
+    container_name: "${PROJECT_NAME}-schema-registry-ui"
+    depends_on:
+      - kafka
+      - schema-registry
+    image: landoop/schema-registry-ui:latest
+    networks:
+      - kafka-custom-network
+    network_mode: bridge
+    environment:
+#      SCHEMAREGISTRY_URL: http://localhost:8081
+      SCHEMAREGISTRY_URL: http://schema-registry-net:8081
+#      SCHEMAREGISTRY_URL: http://schema-registry:8081
+      ALLOW_GLOBAL: 1
+      ALLOW_TRANSITIVE: 1
+      ALLOW_DELETION: 1
+#      READONLY_MODE: 1
+      PROXY: 1
+#      PROXY_SKIP_VERIFY: 1
+      PORT: 8000
+#      CADDY_OPTIONS: timeouts none
+#      RELATIVE_PROXY_URL: 0
+    ports:
+      - ${SCHEMA_REGISTRY_PORT}:8000
+networks:
+  kafka-custom-network:
+    driver: bridge
