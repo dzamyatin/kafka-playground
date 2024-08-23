@@ -1,4 +1,14 @@
-### Create a new schema
+### Create a new PROTOBUF schema
+POST http://localhost:8081/subjects/prototest-value/versions
+Content-Type: application/vnd.schemaregistry.v1+json
+
+{
+  "schemaType": "PROTOBUF",
+  "schema": "syntax = \"proto3\";\npackage adv.search;\n\nimport \"google/protobuf/timestamp.proto\";\n\nmessage InputHint {\n  oneof event {\n    Create create = 1;\n    Update update = 2;\n    Delete delete = 3;\n  }\n\n  message Create {\n    uint32 id = 1;\n    string title = 2;\n    bool is_active = 3;\n    google.protobuf.Timestamp active_from = 4;\n    google.protobuf.Timestamp active_to = 5;\n    string text = 6;\n    string url = 7;\n    uint32 sort = 8;\n  }\n  message Update {\n    uint32 id = 1;\n    string title = 2;\n    bool is_active = 3;\n    google.protobuf.Timestamp active_from = 4;\n    google.protobuf.Timestamp active_to = 5;\n    string text = 6;\n    string url = 7;\n    uint32 sort = 8;\n  }\n  message Delete {\n    uint32 id = 1;\n  }\n}\n"
+}
+###
+
+### Create a new AVRO schema
 POST http://localhost:8081/subjects/test-value/versions
 Content-Type: application/vnd.schemaregistry.v1+json
 
