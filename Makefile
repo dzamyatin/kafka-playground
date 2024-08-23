@@ -19,3 +19,5 @@ restart:
 menu:
 	echo 'Kafka UI: http://localhost:$(KAFKA_UI_PORT)/'
 	echo 'Registry UI: http://localhost:$(SCHEMA_REGISTRY_UI_PORT)/'
+import-file:
+	cat ./data/schema-import-full.json | go run ./command/schema-import/main.go  --url http://localhost:8081 --importer import

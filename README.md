@@ -33,4 +33,25 @@ curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
   http://localhost:8081/subjects/test-value/versions
 ```
 
+Change compatibility setting on subject:
+```
+curl -X PUT -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+       --data '{"compatibility": "BACKWARD_TRANSITIVE"}' \
+       http://localhost:8081/config/transactions-value
+```
 
+## Import
+1) Activate import mode:
+```
+curl -X PUT -H "Content-Type: application/json" "http://localhost:8081/mode/my-cool-subject" --data '{"mode": "IMPORT"}'
+```
+2) Actually import:
+```
+curl -X POST -H "Content-Type: application/json" \
+--data '{"schemaType": "AVRO", "version":1, "id":24, "schema":"{\"type\":\"record\",\"name\":\"value_a1\",\"namespace\":\"com.mycorp.mynamespace\",\"fields\":[{\"name\":\"field1\",\"type\":\"string\"}]}" }' \
+http://localhost:8081/subjects/my-cool-subject/versions
+```
+3) Return subject to normal mode
+```
+curl -X PUT -H "Content-Type: application/json" "http://localhost:8081/mode/my-cool-subject" --data '{"mode": "READWRITE"}'
+```
