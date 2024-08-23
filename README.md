@@ -10,6 +10,8 @@ https://github.com/jenkinsci/jenkins
 # REGISTRY INTERACTION
 https://docs.confluent.io/platform/current/schema-registry/schema_registry_onprem_tutorial.html
 
+## API doc:
+https://docs.confluent.io/platform/current/schema-registry/develop/api.html#put--mode-(string-%20subject)
 
 To view all the subjects registered in Schema Registry
 ```
@@ -40,10 +42,16 @@ curl -X PUT -H "Content-Type: application/vnd.schemaregistry.v1+json" \
        http://localhost:8081/config/transactions-value
 ```
 
+Schemas list:
+```
+curl --silent -X GET http://localhost:8081/schemas/ | jq .
+```
+
+
 ## Import
 1) Activate import mode:
 ```
-curl -X PUT -H "Content-Type: application/json" "http://localhost:8081/mode/my-cool-subject" --data '{"mode": "IMPORT"}'
+curl -X PUT -H "Content-Type: application/json" "http://localhost:8081/mode/my-cool-subject?force=1" --data '{"mode": "IMPORT"}'
 ```
 2) Actually import:
 ```
@@ -53,5 +61,5 @@ http://localhost:8081/subjects/my-cool-subject/versions
 ```
 3) Return subject to normal mode
 ```
-curl -X PUT -H "Content-Type: application/json" "http://localhost:8081/mode/my-cool-subject" --data '{"mode": "READWRITE"}'
+curl -X PUT -H "Content-Type: application/json" "http://localhost:8081/mode/my-cool-subject?force=1" --data '{"mode": "READWRITE"}'
 ```

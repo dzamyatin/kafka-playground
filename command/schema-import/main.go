@@ -134,7 +134,7 @@ func (r *importImporter) doSwithModeRequest(subject string, mode importMode) err
 	body := bytes.NewReader([]byte(`{"mode": "` + mode + `"}`))
 	req, err := http.NewRequest(
 		"PUT",
-		r.distSchemaRegistryUrl+"/mode/"+subject,
+		r.distSchemaRegistryUrl+"/mode/"+subject+"?force=true",
 		body,
 	)
 	res, err = r.client.Do(req)

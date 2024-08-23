@@ -1,0 +1,9 @@
+[
+  {
+    "subject": "-value",
+    "version": 1,
+    "id": 22,
+    "schemaType": "PROTOBUF",
+    "schema": "syntax = \"proto3\";\npackage payment;\n\noption go_package = \"/payment\";\n\nmessage Order {\n  oneof event {\n    SbpStatusChanged sbp_status_changed = 1;\n    SberpaymentStatusChanged sberpayment_status_changed = 2;\n  }\n}\nmessage SbpStatusChanged {\n  oneof status {\n    Paid paid = 1;\n    Created created = 2;\n    Reversed reversed = 3;\n    Refunded refunded = 4;\n    Revoked revoked = 5;\n    Declined declined = 6;\n    Expired expired = 7;\n    Authorized authorized = 8;\n    Confirmed confirmed = 9;\n    OnPayment on_payment = 10;\n  }\n}\nmessage SberpaymentStatusChanged {\n  oneof status {\n    Created created = 1;\n    Reversed reversed = 2;\n    Authorized authorized = 3;\n    Revoked revoked = 4;\n    Refunded refunded = 5;\n    OnAcs on_acs = 6;\n    Declined declined = 7;\n  }\n}\nmessage Paid {\n  string orderNumber = 1;\n}\nmessage Created {\n  string orderNumber = 1;\n}\nmessage Reversed {\n  string orderNumber = 1;\n}\nmessage Refunded {\n  string orderNumber = 1;\n}\nmessage Revoked {\n  string orderNumber = 1;\n}\nmessage Declined {\n  string orderNumber = 1;\n}\nmessage Expired {\n  string orderNumber = 1;\n}\nmessage Authorized {\n  string orderNumber = 1;\n}\nmessage Confirmed {\n  string orderNumber = 1;\n}\nmessage OnPayment {\n  string orderNumber = 1;\n}\nmessage OnAcs {\n  string orderNumber = 1;\n}\n"
+  }
+]
