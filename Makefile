@@ -21,3 +21,5 @@ menu:
 	echo 'Registry UI: http://localhost:$(SCHEMA_REGISTRY_UI_PORT)/'
 import-file:
 	cat ./data/schema-import.json | go run ./command/schema-import/main.go  --url http://localhost:8081 --importer import
+import:
+	curl $(IMPORT_URL) | go run ./command/schema-import/main.go  --url http://localhost:8081 --importer import
