@@ -16,10 +16,14 @@ down:
 	docker compose -f ./docker-compose.yml down
 restart:
 	docker compose -f ./docker-compose.yml restart
+#menu:
+#	echo 'Kafka UI: http://localhost:$(KAFKA_UI_PORT)/'
+#	echo 'Registry UI: http://localhost:$(SCHEMA_REGISTRY_UI_PORT)/'
+#	echo 'Schema: http://localhost:$(SCHEMA_PORT)/'
 menu:
 	echo 'Kafka UI: http://localhost:$(KAFKA_UI_PORT)/'
-	echo 'Registry UI: http://localhost:$(SCHEMA_REGISTRY_UI_PORT)/'
+	echo 'Schema: http://localhost:$(SCHEMA_PORT)/'
 import-file:
 	cat ./data/schema-import.json | go run ./command/schema-import/main.go  --url http://localhost:8081 --importer import
 import:
-	curl $(IMPORT_URL) | go run ./command/schema-import/main.go  --url http://localhost:8081 --importer import
+	curl $(IMPORT_URL) | go run ./command/schema-import/main.go  --url http://localhost:$(SCHEMA_PORT) --importer import

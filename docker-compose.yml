@@ -62,31 +62,31 @@ services:
     ports:
       - ${SCHEMA_PORT}:8081
 #https://hub.docker.com/r/landoop/schema-registry-ui/
-  schema-registry-ui:
-    restart: always
-    container_name: "${PROJECT_NAME}-schema-registry-ui"
-    depends_on:
-      - kafka
-      - schema-registry
-    image: landoop/schema-registry-ui:latest
-    networks:
-      - kafka-custom-network
-    network_mode: bridge
-    environment:
-#      SCHEMAREGISTRY_URL: http://localhost:8081
-      SCHEMAREGISTRY_URL: http://schema-registry-net:8081
-#      SCHEMAREGISTRY_URL: http://schema-registry:8081
-      ALLOW_GLOBAL: 1
-      ALLOW_TRANSITIVE: 1
-      ALLOW_DELETION: 1
-#      READONLY_MODE: 1
-      PROXY: 1
-#      PROXY_SKIP_VERIFY: 1
-      PORT: 8000
-#      CADDY_OPTIONS: timeouts none
-#      RELATIVE_PROXY_URL: 0
-    ports:
-      - ${SCHEMA_REGISTRY_UI_PORT}:8000
+#  schema-registry-ui:
+#    restart: always
+#    container_name: "${PROJECT_NAME}-schema-registry-ui"
+#    depends_on:
+#      - kafka
+#      - schema-registry
+#    image: landoop/schema-registry-ui:latest
+##    networks:
+##      - kafka-custom-network
+#    network_mode: bridge
+#    environment:
+##      SCHEMAREGISTRY_URL: http://localhost:8081
+#      SCHEMAREGISTRY_URL: http://schema-registry-net:8081
+##      SCHEMAREGISTRY_URL: http://schema-registry:8081
+#      ALLOW_GLOBAL: 1
+#      ALLOW_TRANSITIVE: 1
+#      ALLOW_DELETION: 1
+##      READONLY_MODE: 1
+#      PROXY: 1
+##      PROXY_SKIP_VERIFY: 1
+#      PORT: 8000
+##      CADDY_OPTIONS: timeouts none
+##      RELATIVE_PROXY_URL: 0
+#    ports:
+#      - ${SCHEMA_REGISTRY_UI_PORT}:8000
 networks:
   kafka-custom-network:
     driver: bridge
