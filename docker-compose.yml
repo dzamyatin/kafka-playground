@@ -2,7 +2,8 @@ services:
   zookeeper:
     restart: always
     container_name: "${PROJECT_NAME}-zookeeper"
-    image: confluentinc/cp-zookeeper:7.4.4
+#    image: confluentinc/cp-zookeeper:7.4.4
+    image: confluentinc/cp-zookeeper:7.5.0
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -13,7 +14,8 @@ services:
   kafka:
     restart: always
     container_name: "${PROJECT_NAME}-kafka"
-    image: confluentinc/cp-kafka:7.4.4
+#    image: confluentinc/cp-kafka:7.4.4
+    image: confluentinc/cp-kafka:7.5.0
     depends_on:
       - zookeeper
     ports:
@@ -45,7 +47,8 @@ services:
     depends_on:
       - kafka
     container_name: "${PROJECT_NAME}-schema-registry"
-    image: confluentinc/cp-schema-registry:latest
+#    image: confluentinc/cp-schema-registry:latest
+    image: confluentinc/cp-schema-registry:7.5.0
     networks:
       kafka-custom-network:
         aliases:
@@ -61,6 +64,23 @@ services:
 #      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL:
     ports:
       - ${SCHEMA_PORT}:8081
+#  control-center:
+#    image: confluentinc/cp-enterprise-control-center:7.5.0
+#    depends_on:
+#      - kafka
+#      - schema-registry
+#      - zookeeper
+#    ports:
+#      - "9021:9021"
+#    environment:
+#      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:9092'
+#      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8082"
+#      CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181"
+#      CONTROL_CENTER_REPLICATION_FACTOR: 1
+#      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+#      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+#      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+#      PORT: 9021
 #https://hub.docker.com/r/landoop/schema-registry-ui/
 #  schema-registry-ui:
 #    restart: always
